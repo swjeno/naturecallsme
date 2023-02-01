@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, jsonify
+import certifi
+from pymongo import MongoClient
+from flask import Flask, render_template, request, jsonify, send_from_directory
 
 app = Flask(__name__)
-from pymongo import MongoClient
-import certifi
 
 ca = certifi.where()
 
@@ -39,12 +39,9 @@ def get_data(filename):
         return f'Error: {e}'
 
 
-@app.route("/toiletloc", methods=["GET"])
-def get_toilet_locations():
-    with open("static/data/toiletloc.json", "r") as f:
-        toilet_data = json.load(f)
-
-    return jsonify(toilet_data)
+@app.route('/data/toiletloc.json', methods=["GET"])
+def get_toiletloc_json():
+    return send_from_directory(app.static_folder, 'data/toiletloc.json', as_attachment=False)
 
 
 if __name__ == '__main__':
