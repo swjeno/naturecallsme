@@ -99,45 +99,6 @@ function myLocation() {
   });
 }
 
-function toiletLoc(callback) {
-  //geolocation API 시작
-  navigator.geolocation.getCurrentPosition(function (position) {
-    var lat = position.coords.latitude, // 위도
-      lon = position.coords.longitude; // 경도
-
-    var locPosition = new kakao.maps.LatLng(lat, lon); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-
-    // 지도 중심좌표를 접속위치로 변경합니다
-    map.setCenter(locPosition);
-
-    // 마커와 인포윈도우를 표시합니다
-    console.log(locPosition);
-
-    // addr2coord 를 활용해 공공화장실 API 에서 도로명주소 필드명을 for문 돌리고 wgx84좌표 수집 -> 지도에 marker 표시
-  });
-
-  //테스트용 화장실 좌표정보 API ajax GET
-  $.ajax({
-    type: "GET",
-    url: "http://openapi.seoul.go.kr:8088/6b716f6a533439343237426a4d7a75/json/SearchPublicToiletPOIService/1/5/",
-    data: {},
-    success: function (response) {
-      let positions = [];
-      var data = response["SearchPublicToiletPOIService"]["row"];
-      for (var i in data) {
-        var position = {};
-        position["FNAME"] = data[i]["FNAME"];
-        position["latlng"] = new kakao.maps.LatLng(
-          data[i]["X_WGS84"],
-          data[i]["Y_WGS84"]
-        );
-        positions.push(position);
-      }
-      console.log(positions);
-    },
-  });
-}
-
 function getcoords() {
   $.ajax({
     type: "GET",
